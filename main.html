@@ -1,0 +1,52 @@
+<link rel="stylesheet" type="text/css" href="main.css">
+<script src="jquery.js"></script>
+New frame : <input type="text" id="new_frame" /> (lines/cols/cell_width/cell_height/default_color)
+<div id="frame_container">
+	
+</div>
+Default color : <input type="text" id="new_default_color" /> </br>
+Paint color : <input type="text" id="new_paint_color" /> </br>
+<input type="button" value="clear frame" id="defaultFrame" />
+<script src="tools.js"></script>
+<script src="frame.js"></script>
+<script src="user.js"></script>
+<script>
+	var frame=new Frame(10,10,40,40,"white");
+	var user=new User("red");
+	$("#frame_container").html(frame.html);
+	$("#new_frame").keyup(function(e){
+		if(e.which == 13){
+			var res=$(this).val().split("/");
+			console.log(res);
+			for(var i=0;i<res.length-1;i++){
+				res[i]=parseInt(res[i]);
+			}
+			frame=new Frame(res[0],res[1],res[2],res[3],res[4]);
+			$("#frame_container").html(frame.html);
+		}
+	});
+	$("#new_default_color").keyup(function(e){
+		if(e.which == 13){
+			frame.setDefaultColor($(this).val());
+			$("#frame_container").html(frame.html);
+		}
+	});$("#new_paint_color").keyup(function(e){
+		if(e.which == 13){
+			user.setPaintColor($(this).val());
+		}
+	});
+	$(document).on("click",".pixel",function(){
+		var i=parseInt($(this).attr("i"));
+		var j=parseInt($(this).attr("j"));
+		if($(this).attr("color") == user.paint_color){
+			frame.alterPixelArr(i,j,frame.default_color);
+		}else{
+			frame.alterPixelArr(i,j,user.paint_color);
+		}
+		$("#frame_container").html(frame.html);
+	});
+	$("#defaultFrame").click(function(){
+		frame.defaultFrame();
+		$("#frame_container").html(frame.html);
+	});
+</script>
